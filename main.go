@@ -6,6 +6,7 @@ import (
 
 	"sm-system/database"
 	"sm-system/internals/workers"
+	"sm-system/router"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/cors"
@@ -26,6 +27,8 @@ func main() {
 	})
 
 	database.ConnectDB()
+
+	router.SetupRoutes(app)
 
 	go func() {
 		for {
