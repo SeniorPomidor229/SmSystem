@@ -38,6 +38,7 @@ func ConnectDB() {
 	fmt.Println("Connect to database")
 
 	DB.AutoMigrate(&models.Sert{})
+	DB.AutoMigrate(&models.User{})
 	fmt.Println("Database migrated")
 }
 
