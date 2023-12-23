@@ -1,6 +1,7 @@
 package workers
 
 import (
+	"time"
 	"encoding/json"
 	"fmt"
 	"io/ioutil"
@@ -61,14 +62,29 @@ func FetchDataAndSave(db *gorm.DB) error {
 				NameOrganization:    getString(fieldValueData["textbox_name_organization"]),
 				NameArrc:            getString(fieldValueData["textbox_name_arrc"]),
 				TypeManagement:      getString(fieldValueData["listbox_type_management_without_id"]),
-				DateValidity:        getString(fieldValueData["date_validity"]),
 				AddressOrganization: getString(fieldValueData["textbox_adress_organization"]),
 				Status:              getString(fieldValueData["listbox_status"]),
 				EntityExpert:        getString(fieldValueData["entity_expert"]),
 				IIN:                 iin,
 				RegNumber:           regNumber,
-				DataFrom:            getString(fieldValueData["date_from"]),
 			}
+			
+			dateValidityStr := getString(fieldValueData["date_validity"])
+			dateFromStr := getString(fieldValueData["date_from"])
+			
+			dateFrom, err := time.Parse("02.01.2006", dateFromStr); if err != nil {
+				log.Printf("Ошибка при парсинге даты: %v", err)
+				dateFrom = time.Time{}
+			}
+
+			dateValidity, err := time.Parse("02.01.2006", dateValidityStr); if err != nil {
+				log.Printf("Ошибка при парсинге даты: %v", err)
+				dateValidity = time.Time{}
+			}
+
+
+			sert.DataFrom = dateFrom
+			sert.DateValidity = dateValidity 
 
 			if err := db.Create(&sert).Error; err != nil {
 				log.Printf("Ошибка при сохранении в базу данных: %v", err)

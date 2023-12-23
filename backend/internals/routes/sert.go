@@ -10,5 +10,7 @@ import (
 func SetupSertRoute(router fiber.Router) {
 	sert := router.Group("/sert")
 
-	sert.Get("/", handlers.GetSerts)
+	sert.Get("/", handlers.GetSerts) 
+
+	sert.Get("/:date", handlers.GetSerts)
 }
