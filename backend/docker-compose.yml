@@ -2,8 +2,9 @@ version: '3.8'
 
 services:
   app:
-    build: .
-    dockerfile: Dockerfile
+    build:
+      context: . 
+      dockerfile: Dockerfile
     ports:
       - "8000:8000"
     environment:
