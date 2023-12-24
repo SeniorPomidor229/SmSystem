@@ -42,10 +42,6 @@ services:
     networks:
       - bridge_network
 
-networks:
-  bridge_network:
-    driver: bridge
-
   # metabase:
   #   image: metabase/metabase
   #   ports:
@@ -59,3 +55,8 @@ networks:
   #     - MB_DB_HOST=${POSTGRES_HOST}
   #   depends_on:
   #     - postgres
+
+networks:
+  bridge_network:
+    driver: bridge
+

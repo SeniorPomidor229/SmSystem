@@ -89,9 +89,7 @@ func FetchDataAndSave(db *gorm.DB) error {
 			if err := db.Create(&sert).Error; err != nil {
 				log.Printf("Ошибка при сохранении в базу данных: %v", err)
 			}
-		} else {
-			log.Println("Сертификат уже существует в базе данных, пропускаем добавление")
-		}
+		} 
 	}
 
 	log.Printf("Данные успешно получены и сохранены")

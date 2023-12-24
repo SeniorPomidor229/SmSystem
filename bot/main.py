@@ -1,4 +1,3 @@
-import asyncio
 import aiogram
 import requests
 import pandas as pd
