@@ -1,24 +1,24 @@
-import aiogram
+import telebot
 import requests
 import pandas as pd
 
-bot = aiogram.Bot(token='6520254439:AAFhzmgkQiQBIn6TOIxAXG_nc6tAJEUWu1U')
-dp = aiogram.Dispatcher(bot)
+TOKEN = '6520254439:AAFhzmgkQiQBIn6TOIxAXG_nc6tAJEUWu1U'
+bot = telebot.TeleBot(TOKEN)
 
-@dp.message_handler(commands=['start'])
-async def start_command(message: aiogram.types.Message):
-    await message.reply("Привет! Чтобы получить данные и экспортировать их в файл XLSX, используйте команду /export")
+@bot.message_handler(commands=['start'])
+def start_command(message):
+    bot.reply_to(message, "Привет! Чтобы получить данные и экспортировать их в файл XLSX, используйте команду /export")
 
-@dp.message_handler(commands=['export'])
-async def export_data(message: aiogram.types.Message):
+@bot.message_handler(commands=['export'])
+def export_data(message):
     try:
-        base_url = "http://127.0.0.1:8000/api/sert/"
-        date_text = message.get_args()
+        base_url = "http://app:8000/api/sert/"
+        date_text = message.text.split()[1] if len(message.text.split()) > 1 else ""
 
         if date_text:
             api_url = base_url + date_text
         else:
-            api_url = base_url  
+            api_url = base_url
 
         response = requests.get(api_url)
 
@@ -34,16 +34,14 @@ async def export_data(message: aiogram.types.Message):
                 df.to_excel(file_name, index=False)
 
                 with open(file_name, 'rb') as file:
-                    await bot.send_document(message.chat.id, file, caption="Ваши данные в файле XLSX")
+                    bot.send_document(message.chat.id, file, caption="Ваши данные в файле XLSX")
         elif response.status_code == 404:
-            await message.reply("Данных для указанной даты нет")
+            bot.reply_to(message, "Данных для указанной даты нет")
         else:
-            await message.reply("Произошла ошибка при получении данных")
+            bot.reply_to(message, "Произошла ошибка при получении данных")
 
     except Exception as e:
         print("Произошла ошибка:", e)
-        await message.reply("Произошла ошибка при экспорте данных")
+        bot.reply_to(message, "Произошла ошибка при экспорте данных")
 
-
-if __name__ == '__main__':
-    aiogram.executor.start_polling(dp, skip_updates=True)
+bot.polling()

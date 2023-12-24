@@ -1,9 +1,9 @@
-FROM python:3.11.6-slim
-
-RUN pip install aiogram requests pandas
-
-COPY main.py /app/main.py
+FROM python:3.11.6
 
 WORKDIR /app
+
+COPY . /app/
+
+RUN pip install --user  -r requirements.txt
 
 CMD ["python", "main.py"]
